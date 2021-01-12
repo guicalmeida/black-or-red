@@ -50,10 +50,4 @@ function game() {
     }
 }
 
-console.log(game());
-
-/*
-function biggerOrSmaller (input, card) {
-    if(){}
-}
-*/
+console.log(game()); 
