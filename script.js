@@ -55,7 +55,8 @@ function greaterOrLess(playerIndex) {
 }
 
 function insideOrOutside (playerIndex) {
-    players[playerIndex].sort(function(a, b){return a-b});
+    players[playerIndex].sort(function(a, b){return a[0]-b[0]});
+    console.log(players[playerIndex])
     let input = prompt("Is the card about to open inside or outside the (inclusive) range formed by the other two?").toLowerCase();
     console.log("You chose " + input + ".");
     let pick = randomCard();
