@@ -3,15 +3,15 @@ let suits = ["H", "C", "D", "S"],
     singleDeck = [],
     players = [];
 
-for (let i=0; i < suits.length; i++) {             // criando as 52 cartas
+for (let i=0; i < suits.length; i++) {             
     for (let y=0; y < (ranks.length); y++) {
         singleDeck.push(new Array(ranks[y], suits[i]))
     }
 }
 
-let doubleDeck = singleDeck.concat(singleDeck);    // usando deck duplo
+let doubleDeck = singleDeck.concat(singleDeck);    
 
-function randomCard () {                           // escolhe carta aleatoria no deck e ja retira da array
+function randomCard () {                           
     let card = Math.floor(Math.random() * doubleDeck.length);
     return doubleDeck.splice(card, 1)[0];
 }
@@ -55,7 +55,7 @@ function greaterOrLess(playerIndex) {
 }
 
 function insideOrOutside (playerIndex) {
-    players[playerIndex].sort();
+    players[playerIndex].sort(function(a, b){return a-b});
     let input = prompt("Is the card about to open inside or outside the (inclusive) range formed by the other two?").toLowerCase();
     console.log("You chose " + input + ".");
     let pick = randomCard();
@@ -75,7 +75,7 @@ function insideOrOutside (playerIndex) {
 }
 
 function whichSuit (playerIndex) {
-    let input = prompt("What's the suit of the card about to open? H, C, D or S?").toLowerCase();
+    let input = prompt("What's the suit of the card about to open? H, C, D or S?").toUpperCase();
     console.log("You chose " + input + ".");         
     let pick = randomCard();
     players[playerIndex].push(pick);
@@ -84,6 +84,30 @@ function whichSuit (playerIndex) {
         return console.log("RIGHT! Your new card suit is " + pick[1] + ". Give out four sips.");
     } else {
         return console.log("WRONG! Your new card suit is " + pick[1] + ". Take four sips.")
+    }
+}
+
+function secondPart (state, round) {
+    let openCard = randomCard();
+    console.log("Round " + round + " in " + state + ". The card dealt is " + openCard);
+    let chosen = players.map(a =>
+        a.map(e =>
+            e.filter(i =>
+                i == openCard[0]
+            )
+        )
+    );
+    let points = []
+    for (let i=0; i < players.length; i++) {
+        points[i] = 0;
+        let occurrences = chosen[i].filter(a => a.length > 0);
+        points[i]+= occurrences.length;
+        if (state == "heaven") {
+            console.log("player " + (i+1) + " gives away " + points[i]*round + " sips.");
+        } else {
+            console.log("player " + (i+1) + " takes " + points[i]*round + " sips.");
+        }
+        
     }
 }
 
@@ -110,6 +134,16 @@ function game() {
             whichSuit(i);
         } 
     }
+    console.log("Here's every hand:")
+    for (let i=0; i < players.length; i++) {
+        console.log("player " + (i + 1) + " hand: " + players[i]);
+    }
+    console.log("Now ten cards will be dealt. Five in heaven, where you give away a X number of sips; and five in hell, where you take a X number of sips. Let's go?")
+    for (let i=1; i <= 5; i++) {
+        secondPart("heaven", i);
+        secondPart("hell", i);
+    }
+    return "GAME OVER!"
 }
 
 console.log(game()); 
