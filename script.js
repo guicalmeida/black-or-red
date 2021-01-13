@@ -74,12 +74,25 @@ function insideOrOutside (playerIndex) {
     }
 }
 
+function whichSuit (playerIndex) {
+    let input = prompt("What's the suit of the card about to open? H, C, D or S?").toLowerCase();
+    console.log("You chose " + input + ".");         
+    let pick = randomCard();
+    players[playerIndex].push(pick);
+    console.log("You've picked the " + pick + " card.")
+    if (input == pick[1]) {
+        return console.log("RIGHT! Your new card suit is " + pick[1] + ". Give out four sips.");
+    } else {
+        return console.log("WRONG! Your new card suit is " + pick[1] + ". Take four sips.")
+    }
+}
+
 function game() {
     let playersPrompt = prompt("How many will be playing? Numbers only");
     for (let i=0; i < playersPrompt; i++) {              
-        players[i] = [];                               // i é igual ao numero de players
+        players[i] = [];                               
     }   
-    while (players[players.length -1].length < 2) {    // enquanto 
+    while (players[players.length -1].length < 4) {     
         for (let i=0; i < players.length; i++) {
             console.log("player " + (i + 1) + " turn...");
             blackOrRed(i);
@@ -91,6 +104,10 @@ function game() {
         for (let i=0; i < players.length; i++) {
             console.log("player " + (i + 1) + " turn. Current hand: " + players[i]);
             insideOrOutside(i);
+        }
+        for (let i=0; i < players.length; i++) {
+            console.log("player " + (i + 1) + " turn. Current hand: " + players[i]);
+            whichSuit(i);
         } 
     }
 }
