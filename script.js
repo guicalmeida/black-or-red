@@ -16,20 +16,9 @@ function randomCard () {                           // escolhe carta aleatoria no
     return doubleDeck.splice(card, 1)[0];
 }
 
-function color(card) {
-    if (card[1] == "C" || card[1] == "S") {
-        return "black";
-    } else {return "red"}
-}
-
-function valueComparison (currentCard, newCard) {
-    if (newCard > currentCard) {
-        return "greater";
-    } else {return "lesser"}
-}
-
-
-function blackOrRed (playerIndex, input) {         // primeiro round
+function blackOrRed (playerIndex) {
+    let input = prompt("Is the card about to open Black or Red?").toLowerCase();
+    console.log("You chose " + input + ".");         
     let pick = randomCard();
     players[playerIndex].push(pick);
     console.log("You've picked the " + pick + " card.")
@@ -38,23 +27,52 @@ function blackOrRed (playerIndex, input) {         // primeiro round
     } else if (input == "red" && (pick[1] == "H" || pick[1] == "D")){
         return console.log("RIGHT! Your new card is red. Give out one sip.");
     } else {
-        return console.log("WRONG! Your new card is " + color(pick) + ". Take one sip.");
+        if (input == "black"){
+            return console.log("WRONG! Your new card is red. Take one sip.");
+        } else {
+            return console.log("WRONG! Your new card is black. Take one sip.");
+        }
     }
 }
 
-function greaterOrLesser (playerIndex, input) {
+function greaterOrLess(playerIndex) {
+    let input = prompt("Is the card about to open greater or less than your first one?").toLowerCase();
+    console.log("You chose " + input + ".");
     let pick = randomCard();
     players[playerIndex].push(pick);
     console.log("You've picked the " + pick + " card.");
     if (input == "greater" && (pick[0] > players[playerIndex][0][0])){
         return console.log("RIGHT! Your new card is greater than your first one. Give out two sips.");
-    } else if (input == "lesser" && (pick[0] < players[playerIndex][0][0])) {
-        return console.log("RIGHT! Your new card is lesser than your first one. Give out two sips.");
+    } else if (input == "less" && (pick[0] < players[playerIndex][0][0])) {
+        return console.log("RIGHT! Your new card is less than your first one. Give out two sips.");
     } else {
-        return console.log("WRONG! Your new card is " + valueComparison(players[playerIndex][0][0],pick[0]) + " than your first one. Take two sips.");
+        if (input == "greater"){
+            return console.log("WRONG! Your new card is less than your first one. Take two sips.");
+        } else {
+            return console.log("WRONG! Your new card is greater than your first one. Take two sips.");
+        }
     }
 }
 
+function insideOrOutside (playerIndex) {
+    players[playerIndex].sort();
+    let input = prompt("Is the card about to open inside or outside the (inclusive) range formed by the other two?").toLowerCase();
+    console.log("You chose " + input + ".");
+    let pick = randomCard();
+    players[playerIndex].push(pick);
+    console.log("You've picked the " + pick + " card.");
+    if (input == "inside" && pick[0] >= players[playerIndex][0][0] && pick[0] <= players[playerIndex][1][0]) {
+        return console.log("RIGHT! Your new card is inside the range. Give out three sips.");
+    } else if (input == "outside" && (pick[0] < players[playerIndex][0][0] || pick[0] > players[playerIndex][1][0])) {
+        return console.log("RIGHT! Your new card is outside the range. Give out three sips.");
+    } else {
+        if (input == "inside") {
+            return console.log("WRONG! Your new card is outside the range. Take three sips.");
+        } else {
+            return console.log("WRONG! Your new card is inside the range. Take three sips.");
+        }
+    }
+}
 
 function game() {
     let playersPrompt = prompt("How many will be playing? Numbers only");
@@ -64,15 +82,15 @@ function game() {
     while (players[players.length -1].length < 2) {    // enquanto 
         for (let i=0; i < players.length; i++) {
             console.log("player " + (i + 1) + " turn...");
-            let choice = prompt("Is the card about to open Black or Red?").toLowerCase();
-            console.log("You chose " + choice + ".");
-            blackOrRed(i, choice);
+            blackOrRed(i);
         }
         for (let i=0; i < players.length; i++) {
-            console.log("player " + (i + 1) + " turn...");
-            let choice2 = prompt("Is the card about to open greater or lesser than your first one?").toLowerCase();
-            console.log("You chose " + choice2 + ".");
-            greaterOrLesser(i, choice2);
+            console.log("player " + (i + 1) + " turn. Current hand: " + players[i]);
+            greaterOrLess(i);
+        }
+        for (let i=0; i < players.length; i++) {
+            console.log("player " + (i + 1) + " turn. Current hand: " + players[i]);
+            insideOrOutside(i);
         } 
     }
 }
