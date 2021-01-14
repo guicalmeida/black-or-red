@@ -147,4 +147,3 @@ function game() {
     return "GAME OVER!"
 }
 
-console.log(game()); 
