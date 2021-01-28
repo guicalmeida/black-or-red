@@ -16,6 +16,12 @@ function randomCard () {
     return doubleDeck.splice(card, 1)[0];
 }
 
+
+
+AAAAAAAAAAA
+
+
+
 function blackOrRed (playerIndex) {
     let input = prompt("Is the card about to open Black or Red?").toLowerCase();
     console.log("You chose " + input + ".");         
@@ -144,6 +150,6 @@ function game() {
         secondPart("heaven", i);
         secondPart("hell", i);
     }
-    return "GAME OVER!"
+    return console.log("GAME OVER!")
 }
 
